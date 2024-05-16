@@ -64,7 +64,7 @@ class ZynqMP(CPU):
     def add_axi_gp_master(self, n=0, data_width=32):
         assert n < 3 and self.axi_gp_masters[n] is None
         assert data_width in [32, 64, 128]
-        axi_gpn = axi.AXIInterface(data_width=data_width, address_width=32, id_width=16)
+        axi_gpn = axi.AXIInterface(data_width=data_width, address_width=32, id_width=16, ar_user_width=16, aw_user_width=16)
         self.config[f'PSU__USE__M_AXI_GP{n}'] = 1
         self.config[f'PSU__MAXIGP{n}__DATA_WIDTH'] = data_width
         self.axi_gp_masters.append(axi_gpn)
@@ -74,8 +74,8 @@ class ZynqMP(CPU):
         dir_map = {DIR_M_TO_S: 'o', DIR_S_TO_M: 'i'}
         for group, signal, direction in layout:
             sig_name = group + signal
-            if sig_name in ['bdest', 'bfirst', 'blast', 'buser', 'rdest', 'rfirst', 'ruser', 'ardest', 'arfirst', 'arlast', 'arregion',
-                            'aruser', 'awdest', 'awfirst', 'awlast', 'awregion', 'awuser', 'wdest', 'wfirst', 'wid', 'wuser']:
+            if sig_name in ['bdest', 'bfirst', 'blast', 'buser', 'rdest', 'rfirst', 'ruser', 'ardest', 'arfirst', 'arlast',
+                            'arregion', 'awdest', 'awfirst', 'awlast', 'awregion', 'wdest', 'wfirst', 'wid', 'wuser']:
                 continue
             direction = dir_map[direction]
             self.cpu_params[f'{direction}_maxigp{n}_{group}{signal}'] = getattr(getattr(axi_gpn, group), signal)
