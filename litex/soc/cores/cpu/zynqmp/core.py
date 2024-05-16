@@ -74,7 +74,8 @@ class ZynqMP(CPU):
         dir_map = {DIR_M_TO_S: 'o', DIR_S_TO_M: 'i'}
         for group, signal, direction in layout:
             sig_name = group + signal
-            if sig_name in ['bfirst', 'blast', 'rfirst', 'arfirst', 'arlast', 'awfirst', 'awlast', 'wfirst', 'wid']:
+            if sig_name in ['bdest', 'bfirst', 'blast', 'buser', 'rdest', 'rfirst', 'ruser', 'ardest', 'arfirst', 'arlast', 'arregion',
+                            'aruser', 'awdest', 'awfirst', 'awlast', 'awregion', 'awuser', 'wdest', 'wfirst', 'wid', 'wuser']:
                 continue
             direction = dir_map[direction]
             self.cpu_params[f'{direction}_maxigp{n}_{group}{signal}'] = getattr(getattr(axi_gpn, group), signal)
